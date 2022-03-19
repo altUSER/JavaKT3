@@ -1,0 +1,16 @@
+server:
+  port: 81
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shop
+    username: postgres
+    password: postgres
+  sql:
+    init:
+      platform: postgres
