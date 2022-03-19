@@ -1,10 +1,8 @@
 package com.shop.kt3.model
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name="goods")
@@ -20,5 +18,10 @@ class CGood(
         val price : Double = 0.0,
 
         @Column(name="category")
-        val category : String = ""
-)
+        val category : String = "",
+
+        @OneToMany(mappedBy = "good", fetch = FetchType.EAGER, cascade = [CascadeType.REMOVE], orphanRemoval = true)
+        @JsonIdentityReference(alwaysAsId = true)
+        var orders: MutableList<COrder> = ArrayList()
+) {
+}

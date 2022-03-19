@@ -1,27 +1,31 @@
 package com.shop.kt3.model
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import org.hibernate.annotations.GenericGenerator
+import java.time.LocalDate
 import java.util.*
 import javax.persistence.*
 
 @Entity
 @Table(name="orders")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator::class, property = "id")
 class COrder (
 
-    @Id
+        @Id
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "UUIDGenerator")
     @Column(name="id", updatable = false, nullable = false)
-    val id: UUID? = null,
+    var id: UUID? = null,
 
-    @ManyToOne
+        @ManyToOne
     @JoinColumn(name="owner", nullable = false)
     var owner: CUser,
 
-    @Column
-    var date : Date? = Date(),
+        @Column
+    var date : LocalDate? = LocalDate.now(),
 
-    @ManyToOne
+        @ManyToOne
     @JoinColumn(name="good", nullable = false)
     var good: CGood,
 )

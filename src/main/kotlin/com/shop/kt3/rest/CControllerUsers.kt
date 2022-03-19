@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
 import java.util.*
 
 @RestController
 @RequestMapping("/users")
 class CControllerUsers {
     @Autowired
-    private lateinit var repositoryUsers: IRepositoryUsers
+    lateinit var repositoryUsers: IRepositoryUsers
 
     @GetMapping("")
     fun getAll(): List<CUser>{
@@ -24,5 +25,10 @@ class CControllerUsers {
     @GetMapping(params=["id"])
     fun getById(@RequestParam id: UUID): CUser? {
         return repositoryUsers.findByIdOrNull(id)
+    }
+
+    @GetMapping(params=["sex"])
+    fun getBySex(@RequestParam sex: Boolean): List<CUser>{
+        return repositoryUsers.findBySex(sex)
     }
 }

@@ -1,11 +1,11 @@
 package com.shop.kt3.model
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference
+import com.fasterxml.jackson.annotation.JsonView
+import org.springframework.web.bind.annotation.PostMapping
 import java.time.LocalDate
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 
 @Entity
@@ -25,5 +25,12 @@ class CUser(
         var sex: Boolean = false,
 
         @Column(name = "dateOfBirth", columnDefinition = "DATE")
-        var dayOfBirth: LocalDate? = null
+        var dateOfBirth: LocalDate? = null,
+
+        @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER, cascade = [CascadeType.REMOVE], orphanRemoval = true)
+        @JsonIdentityReference(alwaysAsId = true)
+        var orders: MutableList<COrder> = ArrayList()
+
+
+
 )
