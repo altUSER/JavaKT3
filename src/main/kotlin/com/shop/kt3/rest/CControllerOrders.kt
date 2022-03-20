@@ -1,10 +1,13 @@
 package com.shop.kt3.rest
 
+import com.shop.kt3.model.CGood
 import com.shop.kt3.model.COrder
+import com.shop.kt3.model.CUser
 import com.shop.kt3.repositories.IRepositoryOrders
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 import java.util.*
 
 @RestController
@@ -24,10 +27,12 @@ class CControllerOrders {
     }
 
     @PostMapping
-    fun saveOrder(@RequestBody order: COrder){
-        if (order.id == null) {
-            order.id = UUID.randomUUID()
-        }
-        repositoryOrders.saveAndFlush(order)
+    fun saveOrder(@RequestBody order: COrder) {
+        repositoryOrders.save(order)
+    }
+
+    @DeleteMapping
+    fun deleteOrder(@RequestBody order: COrder) {
+        repositoryOrders.delete(order)
     }
 }

@@ -1,13 +1,11 @@
 package com.shop.kt3.rest
 
+import com.shop.kt3.model.COrder
 import com.shop.kt3.model.CUser
 import com.shop.kt3.repositories.IRepositoryUsers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import java.util.*
 
@@ -30,5 +28,15 @@ class CControllerUsers {
     @GetMapping(params=["sex"])
     fun getBySex(@RequestParam sex: Boolean): List<CUser>{
         return repositoryUsers.findBySex(sex)
+    }
+
+    @PostMapping
+    fun saveUsers(@RequestBody user: CUser){
+        repositoryUsers.saveAndFlush(user)
+    }
+
+    @DeleteMapping
+    fun deketeUser(@RequestBody user: CUser){
+        repositoryUsers.delete(user)
     }
 }

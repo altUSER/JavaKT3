@@ -13,8 +13,8 @@ import javax.persistence.*
 class COrder (
 
         @Id
-    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
-    @GeneratedValue(generator = "UUIDGenerator")
+//    @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
+//    @GeneratedValue(generator = "UUIDGenerator")
     @Column(name="id", updatable = false, nullable = false)
     var id: UUID? = null,
 
@@ -27,5 +27,7 @@ class COrder (
 
         @ManyToOne
     @JoinColumn(name="good", nullable = false)
-    var good: CGood,
+    var good: CGood
+
+
 )
