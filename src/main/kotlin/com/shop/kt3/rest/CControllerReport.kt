@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
+import java.io.ByteArrayOutputStream
 import java.nio.file.Files
 
 @RestController
@@ -18,12 +19,15 @@ class CControllerReport {
     @Autowired
     private lateinit var repositoryGoods: IRepositoryGoods
 
-    @GetMapping()
-    @ResponseBody
+    @GetMapping(produces = arrayOf("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
     fun getReport(): ByteArray{
-        var goods = repositoryGoods.findAll()
+        val goods = repositoryGoods.findAll()
+        val file = CServicesData.createReport(goods)
 
-        var file = CServicesData.createReport(goods)
-        return Files.readAllBytes(file)
+        val outputStream = ByteArrayOutputStream()
+        file.write(outputStream)
+        file.close()
+
+        return outputStream.toByteArray()
     }
 }

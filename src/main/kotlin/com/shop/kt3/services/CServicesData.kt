@@ -3,23 +3,17 @@ package com.shop.kt3.services
 import com.shop.kt3.model.CGood
 import com.shop.kt3.model.COrder
 import com.shop.kt3.model.CUser
-import com.shop.kt3.repositories.IRepositoryGoods
-import com.shop.kt3.repositories.IRepositoryOrders
-import com.shop.kt3.repositories.IRepositoryUsers
-import com.shop.kt3.rest.CControllerUsers
 import org.apache.poi.ss.usermodel.Row
-import org.apache.poi.wp.usermodel.HeaderFooterType
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.apache.poi.xwpf.usermodel.ParagraphAlignment
 import org.apache.poi.xwpf.usermodel.XWPFDocument
-import org.springframework.beans.factory.annotation.Autowired
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
+import org.apache.poi.xwpf.usermodel.XWPFParagraph
+import org.apache.poi.xwpf.usermodel.XWPFRun
 import java.io.IOException
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 object CServicesData {
 
@@ -146,32 +140,52 @@ object CServicesData {
         return outp
     }
 
-    fun createReport(goods: List<CGood>): FileOutputStream {
-        try{
+    fun createReport(goods: List<CGood>): XWPFDocument {
         var document = XWPFDocument()
-
-        val head = document.createHeader(HeaderFooterType.DEFAULT)
-        head.createParagraph().createRun().setText("Number of orders per good")
-
-
-        val table = document.createTable()
-
-        val tableRowOne = table.getRow(0)
-        tableRowOne.getCell(0).text = "Name"
-        tableRowOne.addNewTableCell().text = "Count"
-        for (good in goods) {
-            val tableRow = table.createRow()
-            tableRow.getCell(0).text = good.name
-            tableRow.addNewTableCell().text = good.orders.size.toString()
-        }
         try {
-            return FileOutputStream("report.docx")
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
+
+            val par1 = document.createParagraph()
+            par1.alignment = ParagraphAlignment.CENTER
+            val title = par1.createRun()
+            title.isBold = true //title
+
+            title.fontFamily = "TimesNewRoman"
+            title.fontSize = 16
+            title.setText("Report")
+
+
+            val par2 = document.createParagraph() //description
+
+            par2.alignment = ParagraphAlignment.CENTER
+            val desc = par2.createRun()
+            desc.fontFamily = "TimesNewRoman"
+            desc.fontSize = 13
+            desc.setText("Number of orders per good")
+
+
+            val table = document.createTable()
+            val p: XWPFParagraph = document.createParagraph()
+
+
+            val tableRowOne = table.getRow(0)
+            var r = tableRowOne.getCell(0).getParagraphArray(0).createRun();
+            r.setText("Name");
+
+            r = tableRowOne.addNewTableCell().addParagraph().createRun();
+            r.setText("Count");
+
+            for (good in goods) {
+                val tableRow = table.createRow()
+                r = tableRow.getCell(0).addParagraph().createRun();
+                r.setText(good.name)
+
+                r = tableRow.getCell(1).addParagraph().createRun();
+                r.setText(good.orders.size.toString())
+            }
+
         } catch (e: IOException) {
             e.printStackTrace()
         }
-    } catch (e: IOException) {
-        e.printStackTrace()
+        return document
     }
 }
